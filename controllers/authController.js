@@ -198,11 +198,11 @@ exports.resetPassword = async function (req, res, next) {
     { id: user.id },
     process.env.JWT_SECRET_KEY,
     {
-      expiresIn: process.env.EEXPIRES,
+      expiresIn: process.env.EXPIRES,
     },
     (err, token) => {
       if (!token || err)
-        return next(new ErrorHanddler(400, "token has not been generated"));
+        return next(new ErrorHandler(400, "token has not been generated"));
       sendCookie(res, token);
       // res.cookie('jwt', token);
       res.status(200).json({
