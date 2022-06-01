@@ -1,6 +1,6 @@
 const express = require("express");
 const userRoutes = require("./routes/userRoutes");
-
+const errorController = require("./controllers/errorController.js");
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -16,5 +16,11 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/api/v1/users", userRoutes);
+
+app.all("*", function (req, res, next) {
+  next(new ErrorHandler(404, "no such route found on this api "));
+});
+
+app.use(errorController);
 
 module.exports = app;
