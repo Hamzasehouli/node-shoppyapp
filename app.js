@@ -5,6 +5,9 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  console.log("get /");
+});
 app.use("/api/v1/users", userRoutes);
 
 module.exports = app;
