@@ -18,7 +18,9 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
-app.listen(port, () => console.log(`Server is listenning on port ${port}`));
+const server = app.listen(port, () =>
+  console.log(`Server is listenning on port ${port}`)
+);
 
 process.on("unhandledRejection", function (err) {
   console.log(err.name, err.message);
