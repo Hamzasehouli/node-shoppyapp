@@ -1,5 +1,6 @@
 module.exports = function (err, req, res, next) {
   const env = process.env.NODE_ENV.trim();
+  console.log(env);
   if (env === "development") {
     if (err.isOperational) {
       if (!req.url.startsWith("/api/v1/")) {
