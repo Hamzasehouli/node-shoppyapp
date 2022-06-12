@@ -19,38 +19,41 @@ exports.register = async function (req, res, next) {
     confirmPassword: req.body.confirmPassword,
   };
 
-  const user = await User.create(obj);
+  try {
+    const user = await User.create(obj);
 
-  await jwt.sign(
-    { id: user.id },
-    process.env.JWT_SECRET_KEY,
-    {
-      expiresIn: process.env.EXPIRES,
-    },
-    async (err, token) => {
-      if (!token || err)
-        return next(new ErrorHandler(400, "token has not been generated"));
-      const obj = {
-        to: user.email,
-        subject: `Welcome ${user.firstName} to ${process.env.COMPANY}`,
-        text: `Hellow ${user.firstName} to our famila, we are very glad that you have joind us, if you would have any question, feel free to ask us, we will be happy to answer`,
-      };
+    jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: process.env.EXPIRES,
+      },
+      async (err, token) => {
+        if (!token || err)
+          return next(new ErrorHandler(400, "token has not been generated"));
+        const obj = {
+          to: user.email,
+          subject: `Welcome ${user.firstName} to ${process.env.COMPANY}`,
+          text: `Hellow ${user.firstName} to our famila, we are very glad that you have joind us, if you would have any question, feel free to ask us, we will be happy to answer`,
+        };
 
-      // res.cookie('jwt', token);
-      sendCookie(res, token);
-      res.status(201).json({
-        status: "success",
-        data: {
-          user,
-        },
-      });
-    }
-  );
+        // res.cookie('jwt', token);
+        sendCookie(res, token);
+        res.status(201).json({
+          status: "success",
+          data: {
+            user,
+          },
+        });
+      }
+    );
+  } catch (err) {
+    return next(new ErrorHandler(500, err.code));
+  }
 };
 
 exports.login = async function (req, res, next) {
   const { email, password } = req.body;
-
   if (!email) {
     return next(new ErrorHandler(400, "Please enter your email"));
   }
@@ -74,7 +77,8 @@ exports.login = async function (req, res, next) {
       )
     );
   }
-  await jwt.sign(
+
+  jwt.sign(
     { id: user.id },
     process.env.JWT_SECRET_KEY,
     {

@@ -10,7 +10,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  console.log("get /");
   res.status(200).json({
     status: "success",
     message: "The password has been reset successfully",

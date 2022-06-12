@@ -1,6 +1,5 @@
 const dotenv = require("dotenv");
 process.on("uncaughtException", (err) => {
-  console.log(err.name, err.message);
   process.exit(1);
 });
 dotenv.config({ path: `${__dirname}/.env` });
@@ -18,7 +17,7 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
-const server = app.listen(port, () =>
+const server = app.listen(port, "172.20.192.1", () =>
   console.log(`Server is listenning on port ${port}`)
 );
 

@@ -1,6 +1,6 @@
 module.exports = function (err, req, res, next) {
   const env = process.env.NODE_ENV.trim();
-  console.log(env);
+
   if (env === "development") {
     if (err.isOperational) {
       if (!req.url.startsWith("/api/v1/")) {
@@ -8,6 +8,14 @@ module.exports = function (err, req, res, next) {
           statusCode: err.statusCode,
           status: err.status,
           error: err.message,
+        });
+      }
+      if (err.message === "11000") {
+        console.log(err.message, "dddd");
+        return res.status(err.statusCode).json({
+          statusCode: 500,
+          status: err.status,
+          error: "The account with entered email is already used",
         });
       }
       return res.status(err.statusCode).json({
