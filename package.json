@@ -21,7 +21,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.6.0",
     "mongoose": "^6.3.5",
-    "nodemailer": "^6.7.5"
+    "nodemailer": "^6.7.5",
+    "pug": "^3.0.2"
   },
   "engines": {
     "node": ">=10.0.0"

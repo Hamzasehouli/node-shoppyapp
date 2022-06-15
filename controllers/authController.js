@@ -4,11 +4,12 @@ const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../providers/ErrorHandler.js");
 const SendEmail = require("../providers/sendEmail");
 const sendCookie = function (res, token) {
-  res.cookie("jwt", token, {
-    // secure: process.env.NODE_ENV === 'production' ? true : false,
-    // httpOnly: true,
-    // expires: 60 * 60 * 1000,
-  });
+  return token;
+  // res.cookie("jwt", token, {
+  //   // secure: process.env.NODE_ENV === 'production' ? true : false,
+  //   // httpOnly: true,
+  //   // expires: 60 * 60 * 1000,
+  // });
 };
 
 exports.register = async function (req, res, next) {
@@ -31,16 +32,17 @@ exports.register = async function (req, res, next) {
       async (err, token) => {
         if (!token || err)
           return next(new ErrorHandler(400, "token has not been generated"));
-        const obj = {
-          to: user.email,
-          subject: `Welcome ${user.firstName} to ${process.env.COMPANY}`,
-          text: `Hellow ${user.firstName} to our famila, we are very glad that you have joind us, if you would have any question, feel free to ask us, we will be happy to answer`,
-        };
+        // const obj = {
+        //   to: user.email,
+        //   subject: `Welcome ${user.firstName} to ${process.env.COMPANY}`,
+        //   text: `Hellow ${user.firstName} to our famila, we are very glad that you have joind us, if you would have any question, feel free to ask us, we will be happy to answer`,
+        // };
 
         // res.cookie('jwt', token);
-        sendCookie(res, token);
+        // const token = sendCookie(res, token);
         res.status(201).json({
           status: "success",
+          token,
           data: {
             user,
           },
@@ -87,10 +89,11 @@ exports.login = async function (req, res, next) {
     (err, token) => {
       if (!token || err)
         return next(new ErrorHandler(400, "token has not been generated"));
-      sendCookie(res, token);
+
       // res.cookie('jwt', token);
       res.status(200).json({
         status: "success",
+        token,
         data: {
           user,
         },
@@ -124,6 +127,7 @@ exports.forgetPassword = async function (req, res, next) {
     to: user.email,
     subject: `Please use the URL below to reset your password`,
     text: `The url is valid for 10 min : ${url}`,
+    html: `<a target="_blank" href="${url}">The url is only valid for 10 min : ${url}</a>`,
   };
 
   try {
@@ -147,6 +151,7 @@ exports.resetPassword = async function (req, res, next) {
   // if (!currentPassword) {
   //   return next(new ErrorHandler(404, 'Please enter your current password'));
   // }
+  console.log(req.params.resetToken);
   if (!newPassword) {
     return next(new ErrorHandler(404, "Please enter your new password"));
   }
@@ -215,4 +220,11 @@ exports.resetPassword = async function (req, res, next) {
       });
     }
   );
+};
+
+exports.resetPasswordGet = async function (req, res, next) {
+  res.status(200).render("_resetPassword", {
+    resetToken: req.params.resetToken,
+    title: "Reset password",
+  });
 };
