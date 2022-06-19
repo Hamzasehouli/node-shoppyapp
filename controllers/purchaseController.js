@@ -47,17 +47,14 @@ exports.createSession = async (req, res, next) => {
 };
 
 exports.createPurchase = async function (req, res, next) {
-  console.log("hhhhhhhhhhhhhh");
   const obj = req.body;
-
-  console.log(obj);
 
   const data = obj.data.map((o) => {
     return {
       email: obj.email,
       image: o.imageUrl,
       title: o.title,
-      size: Number(o.size),
+      size: o.size,
       currency: obj.currency,
       price: Number(o.discountPrice) || Number(o.price),
     };

@@ -11,7 +11,7 @@ const purchaseModel = mongoose.Schema({
     type: String,
   },
   size: {
-    type: Number,
+    type: String,
   },
   currency: {
     type: String,
