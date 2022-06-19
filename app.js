@@ -24,6 +24,9 @@ app.use("/api/v1/users", userRoutes);
 app.post("/api/v1/purchase/create", purchaseController.createPurchase);
 app.get("/api/v1/purchase/:email", purchaseController.getPurchases);
 app.post("/api/v1/purchase/checkout-session", purchaseController.createSession);
+app.get("/success", function (rea, res, next) {
+  res.status(200);
+});
 
 app.all("*", function (req, res, next) {
   next(new ErrorHandler(404, "no such route found on this api "));
