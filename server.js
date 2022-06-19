@@ -18,7 +18,7 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
-const server = app.listen(port, process.env.IP, () =>
+const server = app.listen(port, () =>
   console.log(`Server is listenning on port ${port}`)
 );
 
