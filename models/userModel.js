@@ -109,7 +109,6 @@ userSchema.methods.checkPassword = async function (
 };
 
 userSchema.methods.generatePasswordReset = async function () {
-  console.log("jjjjjjjjjjjjjjjjjjjjjjjjj");
   this.resetPasswordToken = await crypto.randomBytes(20).toString("hex");
   this.resetPasswordExpires = Date.now() + 10 * 60 * 1000; //expires in an hour
   await this.save({ validateBeforeSave: false });

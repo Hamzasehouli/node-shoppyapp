@@ -21,6 +21,8 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/api/v1/users", userRoutes);
+app.post("/api/v1/purchase/create", purchaseController.createPurchase);
+app.get("/api/v1/purchase/:email", purchaseController.getPurchases);
 app.post("/api/v1/purchase/checkout-session", purchaseController.createSession);
 
 app.all("*", function (req, res, next) {

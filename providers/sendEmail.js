@@ -19,7 +19,7 @@ module.exports = async function (obj) {
         to: obj.to, // list of receivers
         subject: obj.subject, // Subject line
         text: obj.text, // plain text body
-        // html: '<b>Hello world?</b>', // html body
+        html: obj.html, // html body
       });
       return data;
     } else if (env === "production") {

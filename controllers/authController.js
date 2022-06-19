@@ -116,10 +116,10 @@ exports.forgetPassword = async function (req, res, next) {
 
   const url =
     process.env.NODE_ENV === "development"
-      ? `${req.protocol}//${req.get("host")}/api/v1/users/resetPassword/${
+      ? `${req.protocol}://${req.get("host")}/api/v1/users/resetPassword/${
           user.resetPasswordToken
         }`
-      : `${req.protocol}//${req.get("host")}/resetPassword/${
+      : `${req.protocol}://${req.get("host")}/resetPassword/${
           user.resetPasswordToken
         }`;
 
@@ -151,7 +151,7 @@ exports.resetPassword = async function (req, res, next) {
   // if (!currentPassword) {
   //   return next(new ErrorHandler(404, 'Please enter your current password'));
   // }
-  console.log(req.params.resetToken);
+
   if (!newPassword) {
     return next(new ErrorHandler(404, "Please enter your new password"));
   }

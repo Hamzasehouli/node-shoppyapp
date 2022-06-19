@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Purchase = require("../models/purchaseModel");
 
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
@@ -6,7 +7,6 @@ const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 exports.createSession = async (req, res, next) => {
   try {
     const items = req.body.data;
-    console.log(items);
     // 1) get book
     const lineItems = items.map((c) => {
       return {
@@ -25,7 +25,6 @@ exports.createSession = async (req, res, next) => {
       };
     });
 
-    console.log(lineItems);
     // return;
     // 2)create session
     const session = await stripe.checkout.sessions.create({
@@ -35,6 +34,7 @@ exports.createSession = async (req, res, next) => {
       customer_email: req.body.email,
       // client_reference_id: req.params.bookId,
       success_url: `${req.protocol}://${req.get("host")}/success`,
+      // success_url: `${req.protocol}://${req.get("host")}/success`,
       cancel_url: `${req.protocol}://${req.get("host")}/fail`,
     });
     res.status(200).json({
@@ -47,17 +47,39 @@ exports.createSession = async (req, res, next) => {
 };
 
 exports.createPurchase = async function (req, res, next) {
-  const obj = {
-    rating: req.body.rating,
-    description: req.body.description,
-    book: req.params.bookId,
-    user: req.body.user,
-  };
-  const purchase = await Purchase.create(obj);
+  console.log("hhhhhhhhhhhhhh");
+  const obj = req.body;
+
+  console.log(obj);
+
+  const data = obj.data.map((o) => {
+    return {
+      email: obj.email,
+      image: o.imageUrl,
+      title: o.title,
+      size: Number(o.size),
+      currency: obj.currency,
+      price: Number(o.discountPrice) || Number(o.price),
+    };
+  });
+
+  const purchase = await Purchase.create(data);
   res.status(201).json({
     status: "success",
     data: {
       purchase,
+    },
+  });
+};
+exports.getPurchases = async function (req, res, next) {
+  const email = req.params.email;
+
+  const purchases = await Purchase.find({ email });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      purchases,
     },
   });
 };
