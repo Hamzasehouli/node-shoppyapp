@@ -5,6 +5,8 @@ const errorController = require("./controllers/errorController.js");
 const cookieParser = require("cookie-parser");
 const ErrorHandler = require("./providers/ErrorHandler");
 
+const purchaseController = require("./controllers/purchaseController.js");
+
 const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -19,6 +21,9 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/api/v1/users", userRoutes);
+app.post("/api/v1/purchase/create", purchaseController.createPurchase);
+app.get("/api/v1/purchase/:email", purchaseController.getPurchases);
+app.post("/api/v1/purchase/checkout-session", purchaseController.createSession);
 
 app.all("*", function (req, res, next) {
   next(new ErrorHandler(404, "no such route found on this api "));

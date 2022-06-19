@@ -18,7 +18,6 @@ export default document
         newPassword: newPassword.value,
         confirmNewPassword: confirmNewPassword.value,
       };
-      console.log(obj);
 
       const res = await fetch(
         `/api/v1/users/reset-password/${e.target.dataset.reset}`,
