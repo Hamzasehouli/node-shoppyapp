@@ -33,7 +33,7 @@ exports.createSession = async (req, res, next) => {
       mode: "payment",
       customer_email: req.body.email,
       // client_reference_id: req.params.bookId,
-      success_url: `/success`,
+      success_url: `https://shoppyapp-backend.herokuapp.com/api/v1/success`,
       // success_url: `${req.protocol}://${req.get("host")}/success`,
       cancel_url: `${req.protocol}://${req.get("host")}/fail`,
     });

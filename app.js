@@ -24,8 +24,10 @@ app.use("/api/v1/users", userRoutes);
 app.post("/api/v1/purchase/create", purchaseController.createPurchase);
 app.get("/api/v1/purchase/:email", purchaseController.getPurchases);
 app.post("/api/v1/purchase/checkout-session", purchaseController.createSession);
-app.get("/success", function (rea, res, next) {
-  res.status(200);
+app.get("/api/v1/success", function (req, res, next) {
+  res.status(200).json({
+    status: "success",
+  });
 });
 
 app.all("*", function (req, res, next) {
